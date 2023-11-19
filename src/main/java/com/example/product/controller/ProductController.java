@@ -63,7 +63,7 @@ public class ProductController {
 
     @PatchMapping("/update/{id}")
     public ResponseEntity<APIResponse> updateProduct(@PathVariable Integer id, @RequestBody ProductForm new_product){
-        Product product = productService.updateProduct(id, new_product.getName(), new_product.getDescription(), new_product.getPrice());
+        Product product = productService.updateProduct(id, new_product.getPrice());
         ProductDto productDto = product.toDto();
         APIResponse apiResponse = APIResponse.success(productDto, HttpStatus.OK.value(), "San pham sau khi chinh sua");
         return ResponseEntity.ok(apiResponse);

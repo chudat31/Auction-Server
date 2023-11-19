@@ -17,5 +17,5 @@ public interface ProductService {
 
     void deleteProductById(Integer id);
 
-    Product updateProduct(Integer id, String new_name, String new_brand, int new_price);
+    Product updateProduct(Integer id, int new_price);
 }

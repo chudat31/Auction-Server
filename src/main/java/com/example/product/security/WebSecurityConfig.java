@@ -55,7 +55,9 @@ public class WebSecurityConfig<CustomAuthenticationFilter> extends WebSecurityCo
 //
         http.authorizeRequests().antMatchers( POST,"/users/login").permitAll();
         http.authorizeRequests().antMatchers(GET, "/users").permitAll();
-        http.authorizeRequests().antMatchers(POST, "/users").hasAnyAuthority("admin");
+        http.authorizeRequests().antMatchers(POST, "/users/**").permitAll();
+        http.authorizeRequests().antMatchers(POST, "/feedback/**").permitAll();
+        http.authorizeRequests().antMatchers(GET, "/feedback/**").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

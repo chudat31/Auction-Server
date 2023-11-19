@@ -43,13 +43,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product updateProduct(Integer id, String new_name, String new_description, int new_price) {
+    public Product updateProduct(Integer id,  int new_price) {
         Product product = productRepository.findById(id).get();
-        product.setDescription(new_description);
-        product.setName(new_name);
         product.setPrice(new_price);
         return productRepository.save(product);
-
     }
 
 }
