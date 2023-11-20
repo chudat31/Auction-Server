@@ -3,15 +3,25 @@ package com.example.product.controller;
 
 import com.example.product.dto.ProductDto;
 import com.example.product.form.ProductForm;
+import com.example.product.models.History;
 import com.example.product.models.Product;
+import com.example.product.models.User;
+import com.example.product.repository.ProductRepository;
+import com.example.product.repository.UserRepository;
 import com.example.product.response.APIResponse;
+import com.example.product.service.HistoryService;
 import com.example.product.service.ProductService;
+import com.example.product.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -21,6 +31,18 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private HistoryService historyService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @PostMapping
     public ResponseEntity<APIResponse> addProduct(@RequestBody Product new_product) {
@@ -46,6 +68,13 @@ public class ProductController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @GetMapping("/highest/{username}")
+    public ResponseEntity<APIResponse> getProductByUsername(@PathVariable String username){
+        List<Product> productList = productRepository.findByUsername(username);
+        APIResponse apiResponse = APIResponse.success(productList, HttpStatus.OK.value(), "Chi tiet san pham: ");
+        return ResponseEntity.ok(apiResponse);
+    }
+
     @GetMapping("/search/{name}")
     public ResponseEntity<APIResponse> getProductByName(@PathVariable String name) {
         Product product = productService.getProductByName(name);
@@ -64,6 +93,18 @@ public class ProductController {
     @PatchMapping("/update/{id}")
     public ResponseEntity<APIResponse> updateProduct(@PathVariable Integer id, @RequestBody ProductForm new_product){
         Product product = productService.updateProduct(id, new_product.getPrice());
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username);
+        product.setUser(user);
+        product.setUsername(username);
+        History history = new History();
+        history.setPrice(new_product.getPrice());
+        history.setDatetime(LocalDateTime.now());
+        history.setName(product.getName());
+        history.setProduct(product);
+        history.setUsername(username);
+        history.setUser(user);
+        historyService.addNewHistory(history);
         ProductDto productDto = product.toDto();
         APIResponse apiResponse = APIResponse.success(productDto, HttpStatus.OK.value(), "San pham sau khi chinh sua");
         return ResponseEntity.ok(apiResponse);

@@ -29,7 +29,7 @@ public class FeedbackController {
     private UserRepository userRepository;
 
     @GetMapping
-    public ResponseEntity<APIResponse> getListCertificate(){
+    public ResponseEntity<APIResponse> getListFeedback(){
         List<Feedback> feedbackList = feedbackService.feedbackList();
         APIResponse apiResponse = APIResponse.success(feedbackList, HttpStatus.OK.value(), "Danh sach phan hoi");
         return ResponseEntity.ok(apiResponse);

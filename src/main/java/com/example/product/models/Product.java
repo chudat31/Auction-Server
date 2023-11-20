@@ -37,8 +37,15 @@ public class Product {
     @Column
     private String image;
 
+    @Column
+    private String username;
+
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "id")
+    private User user;
+
     public ProductDto toDto() {
         return ProductDto.builder().id(id)
-                .name(name).price(price).image(image).description(description).build();
+                .name(name).price(price).image(image).description(description).username(username).build();
     }
 }

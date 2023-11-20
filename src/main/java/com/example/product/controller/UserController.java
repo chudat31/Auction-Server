@@ -8,6 +8,7 @@ import com.example.product.form.RoleToUserForm;
 import com.example.product.form.UserForm;
 import com.example.product.models.Role;
 import com.example.product.models.User;
+import com.example.product.repository.UserRepository;
 import com.example.product.response.APIResponse;
 import com.example.product.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -36,6 +38,9 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 public class UserController {
     @Autowired
     UserService userService;
+
+    @Autowired
+    UserRepository userRepository;
 
     CustomAuthenicationFilter customAuthenticationFilter;
 
@@ -52,6 +57,13 @@ public class UserController {
     public ResponseEntity<APIResponse> getUserDetail() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUserByName(username);
+        APIResponse response = APIResponse.success(user, HttpStatus.OK.value(), "User Detail");
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<APIResponse> getUserById(@PathVariable Integer id) {
+        Optional<User> user = userRepository.findById(id);
         APIResponse response = APIResponse.success(user, HttpStatus.OK.value(), "User Detail");
         return ResponseEntity.ok(response);
     }

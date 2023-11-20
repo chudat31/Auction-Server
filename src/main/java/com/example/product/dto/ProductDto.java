@@ -1,5 +1,6 @@
 package com.example.product.dto;
 
+import com.example.product.models.User;
 import lombok.Builder;
 import lombok.Data;
 
@@ -17,5 +18,7 @@ public class ProductDto {
     private float price;
 
     private Integer cert_id;
+
+    private String username;
 
 }
