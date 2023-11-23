@@ -7,5 +7,6 @@ import lombok.Data;
 public class ProductForm {
     private String name;
     private String description;
+    private String username;
     private int price;
 }

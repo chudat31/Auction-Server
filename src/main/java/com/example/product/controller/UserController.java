@@ -53,9 +53,8 @@ public class UserController {
     }
 
     //Lấy ra thông tin của 1 user
-    @GetMapping("/detail")
-    public ResponseEntity<APIResponse> getUserDetail() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    @GetMapping("/detail/{username}")
+    public ResponseEntity<APIResponse> getUserDetail(@PathVariable String username) {
         User user = userService.getUserByName(username);
         APIResponse response = APIResponse.success(user, HttpStatus.OK.value(), "User Detail");
         return ResponseEntity.ok(response);

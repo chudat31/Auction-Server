@@ -48,17 +48,20 @@ public class WebSecurityConfig<CustomAuthenticationFilter> extends WebSecurityCo
 //                }
 //                ));
         http.authorizeRequests().antMatchers( "/certificate/**").hasAnyAuthority("admin","user");
-        http.authorizeRequests().antMatchers("/product/**").permitAll();
+        http.authorizeRequests().antMatchers("/product/search/{id}").permitAll();
         http.authorizeRequests().antMatchers("/product/{id}").permitAll();
+        http.authorizeRequests().antMatchers("/product/delete/{id}").permitAll();
+        http.authorizeRequests().antMatchers(GET,"/product").permitAll();
+        http.authorizeRequests().antMatchers(GET,"/time/**").permitAll();
 //
 //
 //
         http.authorizeRequests().antMatchers( POST,"/users/login").permitAll();
-        http.authorizeRequests().antMatchers(GET, "/users").permitAll();
+        http.authorizeRequests().antMatchers(GET, "/users/detail").permitAll();
         http.authorizeRequests().antMatchers(POST, "/users/**").permitAll();
         http.authorizeRequests().antMatchers(POST, "/feedback/**").permitAll();
         http.authorizeRequests().antMatchers(GET, "/feedback/**").permitAll();
-        http.authorizeRequests().anyRequest().authenticated();
+
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

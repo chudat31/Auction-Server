@@ -93,7 +93,7 @@ public class ProductController {
     @PatchMapping("/update/{id}")
     public ResponseEntity<APIResponse> updateProduct(@PathVariable Integer id, @RequestBody ProductForm new_product){
         Product product = productService.updateProduct(id, new_product.getPrice());
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        String username = new_product.getUsername();
         User user = userRepository.findByUsername(username);
         product.setUser(user);
         product.setUsername(username);

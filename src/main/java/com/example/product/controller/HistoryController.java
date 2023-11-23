@@ -21,7 +21,7 @@ public class HistoryController {
     @GetMapping("/{username}")
     public ResponseEntity<APIResponse> getListHistoryByUsername(@PathVariable String username){
         List<History> historyList = historyService.getHistoryByUsername(username);
-        if(username.equalsIgnoreCase("chudat")) {
+        if(username.equalsIgnoreCase("chudat@gmail.com")) {
             historyList = historyService.historyList();
         }
         APIResponse apiResponse = APIResponse.success(historyList, HttpStatus.OK.value(), "Lich su dau gia");
